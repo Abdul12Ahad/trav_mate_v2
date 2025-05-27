@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="tours.css" />
+    <!-- Include Boxicons CDN for the profile icon -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <title>Trav Mate</title>
+</head>
+
+<body>
+
+  <!-- Reuse Navbar from Home Page -->
+  <section class="nav-bar">
+    <div class="logo">Trav Mate</div>
+    <ul class="menu">
+      <li><a href="main.html">Home</a></li>
+      <li><a href="tours.html" class="active">Tours</a></li>
+      <li><a href="packages.html">Package</a></li>
+      <li><a href="Blog.html">Blog</a></li>
+      <li><a href="aboutUs.html">About Us</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+    <div class="profile-icon">
+      <a href="userLogin.html">
+        <i class='bx bx-user-circle' style="font-size: 2rem; color: white;"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Full Page Explore India Banner -->
+  <section class="tours-banner">
+    <h1>Explore India Like Never Before</h1>
+    <p>Embark on a journey of discovery through India's rich history, vibrant culture, and breathtaking landscapes. Our curated tours take you to iconic landmarks and hidden gems, offering you a truly unforgettable experience.</p>
+  </section>
+
+  <!-- Tours Section -->
+  <section class="tours-section" id="tours-container">
+    <!-- Tour Cards will be loaded here dynamically -->
+  </section>
+
+  <script>
+    const tourData = [
+      {
+        name: "Taj Mahal",
+        location: "Agra, Uttar Pradesh",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdnStzjceOlWvEiYrdEmaFBDxIZvGx7oGOPQ&s",
+        description: "An iconic symbol of love, the Taj Mahal is a must-visit.",
+        duration: "1 Day",
+        cost: "₹2000"
+      },
+      {
+        name: "Charminar",
+        location: "Hyderabad, Telangana",
+        image: "https://s7ap1.scene7.com/is/image/incredibleindia/2-charminar_hyderabad_telangana-1-city-hero?qlt=82&ts=1726653248112",
+        description: "Explore the heritage and flavors of old Hyderabad.",
+        duration: "2 Days",
+        cost: "₹3000"
+      },
+      {
+        name: "Backwaters of Kerala",
+        location: "Alleppey, Kerala",
+        image: "https://upload.wikimedia.org/wikipedia/commons/2/27/Houseboats_at_Kerala_Backwaters.jpg",
+        description: "Relax in a houseboat amid the lush backwaters.",
+        duration: "3 Days",
+        cost: "₹7000"
+      },
+      {
+        name: "Jaipur Palace Trail",
+        location: "Jaipur, Rajasthan",
+        image: "https://d3vp2rl7047vsp.cloudfront.net/articles/article_images/000/000/022/original/Bike-Trip-Exploring-Jaipur-City-Palace_%28Large%29.jpg?1726214295",
+        description: "Visit forts and palaces of the Pink City.",
+        duration: "2 Days",
+        cost: "₹5000"
+      },
+      {
+        name: "Qutub Minar",
+        location: "Delhi, India",
+        image: "https://lp-cms-production.imgix.net/2019-06/73743035.jpg?fit=crop&ar=1%3A1&w=1200&auto=format&q=75",
+        description: "A UNESCO World Heritage Site, showcasing Indo-Islamic Afghan architecture.",
+        duration: "1 Day",
+        cost: "₹1000"
+      },
+      {
+        name: "Gateway of India",
+        location: "Mumbai, Maharashtra",
+        image: "https://s7ap1.scene7.com/is/image/incredibleindia/gateway-of-india-mumbai-maharashtra-2-attr-hero?qlt=82&ts=1727355556744",
+        description: "A majestic monument built during the British rule.",
+        duration: "1 Day",
+        cost: "₹1500"
+      },
+      {
+        name: "Mysore Palace",
+        location: "Mysore, Karnataka",
+        image: "https://karnatakatourism.org/wp-content/uploads/2020/06/Mysuru-Palace-banner-1920_1100.jpg",
+        description: "Experience the royal heritage of Mysore.",
+        duration: "2 Days",
+        cost: "₹3500"
+      },
+      {
+        name: "Golden Temple",
+        location: "Amritsar, Punjab",
+        image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/6b/92/ef/caption.jpg?w=1200&h=-1&s=1",
+        description: "The holiest site in Sikhism, offering spiritual solace.",
+        duration: "1 Day",
+        cost: "₹2000"
+      },
+      {
+        name: "Ranthambore National Park",
+        location: "Rajasthan",
+        image: "https://static.toiimg.com/photo/97076305.cms",
+        description: "A famous tiger sanctuary where you can spot the majestic Bengal Tiger.",
+        duration: "3 Days",
+        cost: "₹8000"
+      },
+      {
+        name: "Kedarnath Temple",
+        location: "Uttarakhand",
+        image: "https://upload.wikimedia.org/wikipedia/commons/5/56/Kedarnath_Temple_in_Rainy_season.jpg",
+        description: "A pilgrimage site surrounded by scenic mountains.",
+        duration: "4 Days",
+        cost: "₹12000"
+      }
+    ];
+
+    const container = document.getElementById("tours-container");
+
+    tourData.forEach(tour => {
+      const card = document.createElement("div");
+      card.className = "tour-card";
+      card.innerHTML = `
+        <img src="${tour.image}" alt="${tour.name}">
+        <div class="info">
+          <h3>${tour.name}</h3>
+          <p>${tour.description}</p>
+          <div class="meta">
+            <span>${tour.duration}</span>
+            <span>${tour.location}</span>
+            <span>${tour.cost}</span>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> f4350fb94a3552fd3ec38e50ac5464be18d4bdc9

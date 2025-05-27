@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .info {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            width: 80%;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #43a047;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #333;
+            text-align: left;
+        }
+
+        .result img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        ul {
+            padding-left: 20px;
+            text-align: left;
+        }
+
+        .package-select {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .package-button {
+            padding: 10px 20px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .package-button:hover {
+            background-color: #f57c00;
+        }
+
+        .package-details {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .package-card {
+            width: 45%;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .package-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .package-card h4 {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .package-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trip Budget Estimator</h1>
+        <div class="info" id="trip-info">Loading...</div>
+
+        <label for="budget">Enter your budget (₹):</label><br>
+        <input type="number" id="budget" placeholder="e.g. 7000" /><br>
+        <button type="button" id="calculate">Check Plan</button>
+
+        <div class="result" id="plan-result"></div>
+    </div>
+
+    <script>
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const from = urlParams.get("from");
+        const destination = urlParams.get("to");
+        const date = urlParams.get("date");
+
+        const tripInfo = document.getElementById("trip-info");
+        const resultBox = document.getElementById("plan-result");
+
+        const baseTravelCosts = {
+            "Hyderabad": { "Goa": 2200, "Warangal": 600, "Delhi": 3000, "Jaipur": 2800, "Mumbai": 2500, "Ooty": 2300 },
+            "Warangal": { "Hyderabad": 600, "Goa": 2400, "Delhi": 3100, "Mumbai": 2700, "Ooty": 2200 },
+            "Goa": { "Hyderabad": 2200, "Warangal": 2400, "Delhi": 3200, "Mumbai": 1000, "Ooty": 2100 },
+            "Jaipur": { "Hyderabad": 2800, "Warangal": 2900, "Goa": 3200, "Mumbai": 2700, "Ooty": 2300 },
+            "Delhi": { "Hyderabad": 3000, "Warangal": 3100, "Goa": 3200, "Mumbai": 1000, "Ooty": 2500 },
+            "Mumbai": { "Hyderabad": 2500, "Warangal": 2700, "Goa": 1000, "Delhi": 1000, "Ooty": 2300 },
+            "Ooty": { "Hyderabad": 2300, "Warangal": 2200, "Goa": 2100, "Jaipur": 2300, "Delhi": 2500, "Mumbai": 2300 }
+        };
+
+        const tripDetails = {
+            "Hyderabad": {
+                description: ["Stay for 2 Nights", "Charminar & Ramoji Film City", "Breakfast Included"],
+                breakdown: { stay: 2000, travel: 1500, food: 1500 },
+                image: "https://media.istockphoto.com/id/1215274990/photo/high-wide-angle-view-of-charminar-in-the-night.jpg?s=612x612&w=0&k=20&c=byyIjqgbslf-L191n6SJu0s35fvNoVeWsxV5rIPK7Sk=",
+                hotel: "Hotel Deccan Park",
+                packages: [
+                    { name: "Standard Package", cost: 5000, stay: "2 Nights", facilities: ["Breakfast", "Sightseeing", "Local Guide"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 7000, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Airport Pickup"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 9000, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Spa", "Airport Pickup"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 12000, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch & Dinner", "Spa", "Private Transport"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 15000, stay: "5 Nights", facilities: ["Breakfast", "Sightseeing", "Full Board", "Private Transport", "Personal Guide"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Warangal": {
+                description: ["Stay for 1 Night", "Thousand Pillar Temple & Ramappa Temple", "Breakfast Included"],
+                breakdown: { stay: 1500, travel: 800, food: 800 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/4/47/Thousand_Pillars_Temple_Warangal.jpg",
+                hotel: "Hotel Sree Kanya",
+                packages: [
+                    { name: "Standard Package", cost: 2500, stay: "1 Night", facilities: ["Breakfast", "Temple Visit"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 3500, stay: "2 Nights", facilities: ["Breakfast", "Temple Visits", "Sightseeing"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 4500, stay: "2 Nights", facilities: ["Breakfast", "Temple Visits", "Sightseeing", "Private Guide"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 6000, stay: "3 Nights", facilities: ["Breakfast", "Temple Visits", "Sightseeing", "Spa"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 7500, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Temple Visits", "Full Board"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Goa": {
+                description: ["Stay for 3 Nights", "Beaches & Fort Aguada", "Breakfast Included"],
+                breakdown: { stay: 4000, travel: 2000, food: 3000 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Anjuna_beach_sunset.jpg",
+                hotel: "Hotel Candolim",
+                packages: [
+                    { name: "Standard Package", cost: 6000, stay: "3 Nights", facilities: ["Breakfast", "Beach Visits"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 9000, stay: "4 Nights", facilities: ["Breakfast", "Beach Visits", "Lunch"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 12000, stay: "5 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Private Transport"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 15000, stay: "6 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch & Dinner", "Private Pool"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 20000, stay: "7 Nights", facilities: ["Full Board", "Private Transport", "Private Beach Access"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Jaipur": {
+                description: ["Stay for 2 Nights", "Amber Fort & Hawa Mahal", "Breakfast Included"],
+                breakdown: { stay: 2500, travel: 3000, food: 2500 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/0/03/Amber_Fort_View_from_the_Maota_Lake.jpg",
+                hotel: "Hotel Rambagh Palace",
+                packages: [
+                    { name: "Standard Package", cost: 4500, stay: "2 Nights", facilities: ["Breakfast", "Sightseeing"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 6500, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 8500, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Private Transport"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 11000, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch & Dinner", "Private Guide"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 14000, stay: "5 Nights", facilities: ["Breakfast", "Full Board", "Private Transport", "Personalized Tour"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Delhi": {
+                description: ["Stay for 2 Nights", "Red Fort & India Gate", "Breakfast Included"],
+                breakdown: { stay: 3000, travel: 2500, food: 2000 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/India_Gate_in_New_Delhi_03-2016_img3.jpg",
+                hotel: "Hotel Delhi Heights",
+                packages: [
+                    { name: "Standard Package", cost: 5500, stay: "2 Nights", facilities: ["Breakfast", "Sightseeing"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 7500, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 10000, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Private Transport"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 14000, stay: "5 Nights", facilities: ["Full Board", "Private Guide", "Hotel Pickup"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 18000, stay: "6 Nights", facilities: ["Full Board", "Private Guide", "VIP Access"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Mumbai": {
+                description: ["Stay for 3 Nights", "Gateway of India & Marine Drive", "Breakfast Included"],
+                breakdown: { stay: 3500, travel: 2000, food: 2500 },
+                image: "https://upload.wikimedia.org/wikipedia/commons/d/de/Gateway_of_India%2C_Mumbai.jpg",
+                hotel: "Hotel Taj Palace",
+                packages: [
+                    { name: "Standard Package", cost: 6000, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+                    { name: "Deluxe Package", cost: 8500, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+                    { name: "Premium Package", cost: 11000, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Private Cab"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+                    { name: "Luxury Package", cost: 14000, stay: "5 Nights", facilities: ["Breakfast", "Sightseeing", "All Meals", "Private Guide"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+                    { name: "Exclusive Package", cost: 18000, stay: "6 Nights", facilities: ["Full Board", "Private Transport", "City Tour", "Personal Concierge"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+                ]
+            },
+            "Ooty": {
+        description: ["Stay for 2 Nights", "Botanical Garden & Ooty Lake", "Breakfast Included"],
+        breakdown: { stay: 2800, travel: 2200, food: 2000 },
+        image: "https://upload.wikimedia.org/wikipedia/commons/6/66/Ooty_Lake.jpg",
+        hotel: "Hotel Lake View",
+        packages: [
+            { name: "Standard Package", cost: 5000, stay: "2 Nights", facilities: ["Breakfast", "Local Sightseeing"], image: "https://via.placeholder.com/400x200?text=Standard+Package" },
+            { name: "Deluxe Package", cost: 7000, stay: "3 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch"], image: "https://via.placeholder.com/400x200?text=Deluxe+Package" },
+            { name: "Premium Package", cost: 9500, stay: "4 Nights", facilities: ["Breakfast", "Sightseeing", "Lunch", "Private Cab"], image: "https://via.placeholder.com/400x200?text=Premium+Package" },
+            { name: "Luxury Package", cost: 12000, stay: "5 Nights", facilities: ["All Meals", "Local Guide", "Private Transport"], image: "https://via.placeholder.com/400x200?text=Luxury+Package" },
+            { name: "Exclusive Package", cost: 15000, stay: "5 Nights", facilities: ["Full Board", "Luxury Stay", "Mountain Trek", "Personal Guide"], image: "https://via.placeholder.com/400x200?text=Exclusive+Package" }
+            ]
+
+        }
+        }
+
+        const baseTravel = baseTravelCosts[from]?.[destination] || 2000;
+
+        const details = tripDetails[destination];
+
+        if (from && destination && date) {
+            tripInfo.innerHTML = `
+                <strong>From:</strong> ${from} <br>
+                <strong>To:</strong> ${destination} <br>
+                <strong>Date:</strong> ${date}
+            `;
+        } else {
+            tripInfo.innerHTML = `<span class="error">Invalid or unsupported destination.</span>`;
+        }
+
+        function calculatePlan() {
+            const budget = parseInt(document.getElementById("budget").value);
+            if (isNaN(budget) || budget <= 0) {
+                resultBox.innerHTML = "<span class='error'>Please enter a valid budget.</span>";
+                return;
+            }
+
+            if (budget >= (details.breakdown.stay + details.breakdown.food + baseTravel)) {
+                resultBox.innerHTML = `
+                    <h3>✅ Trip Confirmed!</h3>
+                    <img src="${details.image}" alt="${destination}" />
+                    <p>Your budget of ₹${budget} covers the trip to <strong>${destination}</strong>.</p>
+                    <strong>What's Included:</strong>
+                    <ul>${details.description.map(item => `<li>${item}</li>`).join('')}</ul>
+
+                    <strong>Cost Breakdown:</strong>
+                    <ul>
+                        <li>🏨 Stay: ₹${details.breakdown.stay}</li>
+                        <li>🚌 Travel: ₹${baseTravel}</li>
+                        <li>🍽 Food: ₹${details.breakdown.food}</li>
+                    </ul>
+
+                    <strong>Recommended Hotel:</strong> ${details.hotel}<br><br>
+
+                    <button onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${from}&destination=${destination}', '_blank')">
+                        Open Google Maps for Navigation
+                    </button>
+
+                    <div class="package-select">
+                        <strong>Select a Package:</strong>
+                        <div class="package-details">
+                            ${details.packages.map(package => `
+                                <div class="package-card">
+                                    <img src="${package.image}" alt="${package.name}">
+                                    <h4>${package.name}</h4>
+                                    <p><strong>Cost:</strong> ₹${package.cost}</p>
+                                    <p><strong>Stay:</strong> ${package.stay}</p>
+                                    <p><strong>Facilities:</strong> ${package.facilities.join(', ')}</p>
+                                    <button class="package-button">Select ${package.name}</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultBox.innerHTML = `
+                    <h3>❌ Budget Too Low</h3>
+                    <p>Your budget of ₹${budget} is less than the required ₹${details.breakdown.stay + details.breakdown.food + baseTravel} for ${destination}.</p>
+                    <p>Consider increasing your budget or choosing a different destination.</p>
+                `;
+            }
+        }
+
+        document.getElementById("calculate").addEventListener("click", calculatePlan);
+    };
+    </script>
+</body>
+</html>
+<<<<<<< HEAD
+``
+=======
+``
+>>>>>>> f4350fb94a3552fd3ec38e50ac5464be18d4bdc9

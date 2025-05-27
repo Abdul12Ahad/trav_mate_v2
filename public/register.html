@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="registeration.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <title>Register</title>
+</head>
+<body>
+  <header class="header">
+    <nav class="navigation">
+      <a href="index.html">Home</a>
+      <a href="#">Trips</a>
+      <a href="#">Booking</a>
+      <a href="#">Services</a>
+      <a href="#">Rooms</a>
+    </nav>
+    <p class="mylogo">Tripout</p>
+    <form action="#" class="search-bar">
+      <input type="text" placeholder="Search" />
+      <button type="submit"><i class='bx bx-search-alt'></i></button>
+    </form>
+  </header>
+
+  <div class="container">
+    <div class="content">
+      <h2 class="tittle"><i class='bx bx-user-plus'></i> Register Account</h2>
+      <div class="text">
+        <h2>Join us now! <span><br />Register to start your journey...</span></h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        <div class="socialmedia">
+          <a href="#"><i class='bx bxl-linkedin'></i></a>
+          <a href="#"><i class='bx bxl-facebook'></i></a>
+          <a href="#"><i class='bx bxl-instagram'></i></a>
+          <a href="#"><i class='bx bxl-whatsapp'></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="register-box">
+        <form id="register-form" method="POST" onsubmit="return handleRegister(event)">
+          <h2>Register</h2>
+          <div class="inputbox">
+            <input id="FullName" type="text" placeholder="Full Name" required />
+            <span class="icon"><i class='bx bx-user'></i></span>
+          </div>
+          <div class="inputbox">
+            <input id="Email" type="email" placeholder="Email" required />
+            <span class="icon"><i class='bx bxl-gmail'></i></span>
+          </div>
+          <div class="inputbox">
+            <input id="Password" type="password" placeholder="Password" required />
+            <span class="icon"><i class='bx bxs-lock-alt'></i></span>
+          </div>
+          <div class="inputbox">
+            <input id="confirmpw" type="password" placeholder="Confirm Password" required />
+            <span class="icon"><i class='bx bxs-lock-alt'></i></span>
+          </div>
+          <div class="btn">
+            <button type="submit">Register</button>
+          </div>
+          <div class="login">
+            <p>Already have an account? <a href="userLogin.html">Login</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function handleRegister(event) {
+      event.preventDefault();
+      const fullName = document.getElementById("FullName").value;
+      const email = document.getElementById("Email").value;
+      const password = document.getElementById("Password").value;
+      const confirmPassword = document.getElementById("confirmpw").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fullName, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("refreshToken", data.refreshToken);
+          window.location.href = "dashboard.html";
+        } else {
+          alert(data.error || "Registration failed");
+        }
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    }
+  </script>
+</body>
+</html>

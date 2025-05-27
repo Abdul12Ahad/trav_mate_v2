@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved Trips</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #74b9ff, #00b894);
+            color: #333;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .saved-trip-item {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .saved-trip-item h4 {
+            font-size: 20px;
+            color: #0984e3;
+            margin-bottom: 8px;
+        }
+
+        .saved-trip-item p {
+            margin: 6px 0;
+            font-size: 16px;
+        }
+
+        .trip-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .no-trips {
+            font-size: 18px;
+            color: #777;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #333;
+        }
+
+        .detailed-info {
+            margin-top: 15px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .detailed-info h3 {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .detailed-info ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .detailed-info li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="window.location.href='review.html'"><i data-lucide="arrow-left"></i> Back to Review</button>
+        <h2><i data-lucide="bookmark"></i> Saved Trips</h2>
+        <div id="savedTripsList">
+            <p class="no-trips">Loading saved trips...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            fetchSavedTrips();
+        });
+
+        async function fetchSavedTrips() {
+            const savedTripsList = document.getElementById("savedTripsList");
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                savedTripsList.innerHTML = "<p class='no-trips'>You are not logged in.</p>";
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/trips/saved", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.length > 0) {
+                        savedTripsList.innerHTML = ""; // Clear loading message
+                        data.forEach(trip => {
+                            const tripItem = document.createElement("div");
+                            tripItem.classList.add("saved-trip-item");
+                            tripItem.setAttribute('data-trip-id', trip._id);
+                            tripItem.innerHTML = `
+                                <h4>${trip.destination}</h4>
+                                <p><strong>Dates:</strong> ${new Date(trip.startDate).toLocaleDateString()} - ${new Date(trip.endDate).toLocaleDateString()}</p>
+                                <p><strong>Budget:</strong> ${trip.budget} ${trip.currency}</p>
+                                <div class="trip-actions">
+                                    <button class="action-btn" onclick="viewTripDetails('${trip._id}')"><i data-lucide="eye"></i> View Details</button>
+                                    <button class="action-btn" onclick="editTrip('${trip._id}')"><i data-lucide="edit"></i> Edit</button>
+                                    <button class="action-btn delete-btn" onclick="deleteTrip('${trip._id}')"><i data-lucide="trash"></i> Delete</button>
+                                </div>
+                            `;
+                            savedTripsList.appendChild(tripItem);
+                            lucide.createIcons(); // Re-render icons for newly added elements
+                        });
+                    } else {
+                        savedTripsList.innerHTML = "<p class='no-trips'>No saved trips yet.</p>";
+                    }
+                } else if (response.status === 401 || response.status === 403) {
+                    savedTripsList.innerHTML = "<p class='no-trips'>Authentication failed. Please log in again.</p>";
+                    localStorage.removeItem("token");
+                    // Optionally redirect to login page
+                    // window.location.href = "login.html";
+                } else {
+                    savedTripsList.innerHTML = `<p class='no-trips'>Failed to load saved trips: ${data.message || 'Unknown error'}</p>`;
+                }
+
+            } catch (error) {
+                console.error("Error fetching saved trips:", error);
+                savedTripsList.innerHTML = "<p class='no-trips'>Error loading saved trips.</p>";
+            }
+        }
+
+        async function viewTripDetails(tripId) {
+            const tripItem = document.querySelector(`.saved-trip-item[data-trip-id="${tripId}"]`);
+            if (!tripItem.classList.contains('expanded')) {
+                try {
+                    const token = localStorage.getItem("token");
+                    const response = await fetch(`http://localhost:5000/api/trips/${tripId}`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        tripItem.innerHTML += `
+                            <div class="detailed-info">
+                                <p><strong>Duration:</strong> ${data.duration} days</p>
+                                <p><strong>Start Date:</strong> ${new Date(data.startDate).toLocaleDateString()}</p>
+                                <p><strong>End Date:</strong> ${new Date(data.endDate).toLocaleDateString()}</p>
+                                <p><strong>Travel Class:</strong> ${data.travelClass}</p>
+                                <p><strong>Number of Travelers:</strong> ${data.numTravelers}</p>
+                                <h3>Accommodations:</h3>
+                                <ul>
+                                    ${data.accommodations.map(acc => `<li>${acc.name} - ${acc.address} (Price: ${acc.price || 'N/A'})</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        tripItem.classList.add('expanded');
+                        const viewButton = tripItem.querySelector('.action-btn');
+                        viewButton.innerHTML = '<i data-lucide="chevron-up"></i> Hide Details';
+                        viewButton.onclick = () => hideTripDetails(tripId);
+                        lucide.createIcons();
+                    } else if (response.status === 401 || response.status === 403) {
+                        alert("Authentication failed. Please log in again.");
+                        localStorage.removeItem("token");
+                        // Optionally redirect to login
+                    } else {
+                        alert(`Failed to load trip details: ${data.message || 'Unknown error'}`);
+                    }
+                } catch (error) {
+                    console.error("Error fetching trip details:", error);
+                    alert("Error loading trip details.");
+                }
+            }
+        }
+
+        function hideTripDetails(tripId) {
+            const tripItem = document.querySelector(`.saved-trip-item[data-trip-id="${tripId}"]`);
+            const detailedInfo = tripItem.querySelector('.detailed-info');
+            if (detailedInfo) {
+                detailedInfo.remove();
+                tripItem.classList.remove('expanded');
+                const viewButton = tripItem.querySelector('.action-btn');
+                viewButton.innerHTML = '<i data-lucide="eye"></i> View Details';
+                viewButton.onclick = () => viewTripDetails(tripId);
+                lucide.createIcons();
+            }
+        }
+
+        function editTrip(tripId) {
+            localStorage.setItem('tripToEditId', tripId);
+            window.location.href = 'index.html'; // Redirect to your main trip planning page
+        }
+
+        async function deleteTrip(tripId) {
+            if (confirm("Are you sure you want to delete this trip?")) {
+                const token = localStorage.getItem("token");
+                try {
+                    const response = await fetch(`http://localhost:5000/api/trips/${tripId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert("Trip deleted successfully!");
+                        fetchSavedTrips(); // Reload the list of saved trips
+                    } else if (response.status === 401 || response.status === 403) {
+                        alert("Authentication failed. Please log in again.");
+                        localStorage.removeItem("token");
+                        // Optionally redirect to login page
+                        // window.location.href = "login.html";
+                    } else {
+                        alert("Failed to delete trip: " + (data.message || "Unknown error"));
+                    }
+
+                } catch (error) {
+                    console.error("Error deleting trip:", error);
+                    alert("Error deleting trip.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

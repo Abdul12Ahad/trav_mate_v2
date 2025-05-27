@@ -1,0 +1,432 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-image: url("banner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: Roboto, sans-serif;
+}
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+  }
+  
+
+/*------------------------Scroll Bar-----------------------*/
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fde65e;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #fde02f;
+}
+
+/*========================Nav Bar=========================*/
+.nav-bar {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  height: 90px;
+  background-color: #fff;
+  box-shadow: 3px 3px 10px lightslategray;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.logo {
+  flex: 1;
+  font-size: 40px;
+  padding: 20px;
+  margin-left: 50px;
+  font-family: Satisfy;
+}
+
+ul.menu {
+  flex: 1;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.menu li {
+  flex: 1;
+  list-style-type: none;
+  font-size: 16px;
+  font-family: "Barlow Condensed";
+  text-align: center;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.menu li a:hover {
+  color: midnightblue;
+  text-decoration: underline;
+}
+/*========================Profile Section===========================*/
+profile-icon {
+  cursor: pointer;
+}
+
+/* Banner */
+.banner {
+    background: url('banner-image.jpg') no-repeat center center/cover;
+    padding: 100px 20px;
+    text-align: center;
+    color: white;
+}
+
+.banner-text h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.banner-text p {
+    font-size: 20px;
+}
+
+/* Packages Section */
+.packages {
+    padding: 40px 20px;
+    background-color: #f4f4f4;
+}
+
+.package-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-between;
+}
+
+.package-item {
+    width: 30%;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.package-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.package-item h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.package-item p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.book-btn {
+    padding: 10px 20px;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.book-btn:hover {
+    background-color: #e53e2b;
+}
+
+
+/*===============Footer===================*/
+.footer {
+    background-image: url("https://res.cloudinary.com/dxssqb6l8/image/upload/v1605293781/pine-tree_mq2sgp.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 670px;
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer::before {
+    position: absolute;
+    content: "";
+    display: block;
+    background-color: rgba(0, 0, 36, 0.8);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  
+  .footer .links {
+    position: relative;
+    color: #fff;
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .links ul {
+    list-style-type: none;
+  }
+  
+  .links h3 {
+    font-family: Barlow Condensed;
+    font-weight: normal;
+    font-size: 23px;
+    margin-bottom: 15px;
+  }
+  
+  .links li {
+    font-family: Roboto;
+    cursor: pointer;
+    padding: 15px 0;
+  }
+  
+  .links li:hover {
+    color: #ffa801;
+  }
+  
+  /*==========================Responsive=============================*/
+  @media all and (max-width: 1172px) {
+    .banner-text-item .form {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+    }
+  
+    .banner-text-item .form input,
+    .banner-text-item .form .date,
+    .banner-text-item .form a {
+      flex: 1;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+  
+    .banner-text-item .form input {
+      width: 60%;
+    }
+  
+    .banner-text-item .form .date {
+      width: 30%;
+    }
+  
+    .banner-text-item .form .book {
+      width: 10%;
+      font-size: 14px;
+    }
+  
+    .banner-heading h1 {
+      font-size: 60px;
+    }
+  }
+  
+  @media all and (max-width: 1414px) {
+    .banner-text-item .form input {
+      width: 40%;
+    }
+  
+    .banner-text-item .form .date {
+      width: 30%;
+    }
+  
+    .banner-text-item .form .book {
+      width: 20%;
+      font-size: 14px;
+    }
+  }
+  
+  @media all and (max-width: 942px) {
+    .nav-bar {
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: auto;
+      text-align: center;
+      position: static;
+    }
+  
+    .logo {
+      flex: 1;
+      font-size: 30px;
+      margin: 10px auto;
+      font-family: Satisfy;
+      color: #fde02f;
+    }
+  
+    .nav-bar ul {
+      display: none;
+    }
+  
+    .nav-bar ul li {
+      flex: 1;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+  
+    .services {
+      display: flex;
+      flex-flow: column wrap;
+    }
+  
+    .services .service-item {
+      flex: 1;
+      margin-bottom: -130px;
+      width: 400px;
+    }
+  
+    .places-text {
+      margin-top: 200px;
+    }
+  }
+  
+  @media all and (max-width: 928px) {
+    .banner .form input,
+    a {
+      font-size: 12px;
+    }
+  }
+  
+  @media all and (max-width: 1173px) {
+    .banner .form {
+      background-color: transparent;
+    }
+  }
+  
+  @media all and (max-width: 1194px) {
+    .places .card-box p {
+      font-size: 14px;
+    }
+  }
+  
+  @media all and (max-width: 1086px) {
+    .places .cards .text {
+      line-height: 40px;
+    }
+  
+    .cards .text .h2 {
+      font-size: 12px;
+    }
+  
+    .cards .img-card img {
+      height: 260px;
+    }
+  }
+  
+  @media all and (max-width: 974px) {
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      grid-gap: 20px;
+    }
+  
+    .card {
+      width: 300px;
+      height: 500px;
+      margin: auto;
+    }
+  
+    .cards .text {
+      padding: 5px;
+      font-family: Barlow Condensed;
+    }
+  }
+  
+  @media all and (max-width: 1334px) {
+    .about-img img {
+      width: 300px;
+      height: 500px;
+    }
+  }
+  
+  @media all and (max-width: 1116px) {
+    .about {
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .about-img {
+      flex: 1;
+      margin-bottom: 20px;
+    }
+  
+    .about-text {
+      flex: 1;
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .about-text h2 {
+      font-size: 35px;
+    }
+  
+    .about-img img {
+      width: 400px;
+      height: 400px;
+    }
+  }
+  
+  @media all and (max-width: 708px) {
+    .footer {
+      width: 100%;
+      height: 670px;
+      position: relative;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: center;
+    }
+  }

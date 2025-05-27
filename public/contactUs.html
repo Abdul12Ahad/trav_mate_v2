@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - Trav Mate</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Satisfy&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    body {
+      font-family: Roboto, sans-serif;
+      background: #f9f9f9;
+    }
+
+    .nav-bar {
+      display: flex;
+      flex-flow: row wrap;
+      width: 100%;
+      height: 90px;
+      background-color: #fff;
+      box-shadow: 3px 3px 10px lightslategray;
+      align-items: center;
+      justify-content: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .logo {
+      flex: 1;
+      font-size: 40px;
+      padding: 20px;
+      margin-left: 50px;
+      font-family: Satisfy;
+    }
+
+    ul.menu {
+      flex: 1;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+    }
+
+    .menu li {
+      list-style-type: none;
+      font-size: 16px;
+      font-family: "Barlow Condensed";
+    }
+
+    .menu li a {
+      text-decoration: none;
+      color: #000;
+      text-transform: uppercase;
+    }
+
+    .menu li a:hover {
+      color: midnightblue;
+      text-decoration: underline;
+    }
+
+    .profile-icon {
+      cursor: pointer;
+      padding-right: 20px;
+    }
+
+    header {
+      background-color: #0099cc;
+      color: white;
+      padding: 60px;
+      text-align: center;
+    }
+
+    .contact-section {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    .contact-info, .contact-form {
+      flex: 1 1 400px;
+      padding: 20px;
+    }
+
+    .contact-info h2,
+    .contact-form h2 {
+      color: #0077aa;
+      margin-bottom: 20px;
+    }
+
+    .contact-info p {
+      margin: 10px 0;
+      color: #444;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: Roboto;
+    }
+
+    .contact-form button {
+      padding: 12px 20px;
+      background-color: #0077aa;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .contact-form button:hover {
+      background-color: #005f8a;
+    }
+
+    .footer {
+      background-image: url("https://res.cloudinary.com/dxssqb6l8/image/upload/v1605293781/pine-tree_mq2sgp.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 100%;
+      height: 670px;
+      position: relative;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 100px;
+    }
+
+    .footer::before {
+      position: absolute;
+      content: "";
+      background-color: rgba(0, 0, 36, 0.8);
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    .footer .links {
+      position: relative;
+      color: #fff;
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .links ul {
+      list-style-type: none;
+    }
+
+    .links h3 {
+      font-family: Barlow Condensed;
+      font-weight: normal;
+      font-size: 23px;
+      margin-bottom: 15px;
+    }
+
+    .links li {
+      font-family: Roboto;
+      cursor: pointer;
+      padding: 15px 0;
+    }
+
+    .links li:hover {
+      color: #ffa801;
+    }
+
+    @media (max-width: 768px) {
+      .contact-section {
+        flex-direction: column;
+      }
+
+      .nav-bar {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .logo {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!--===========Nav Bar=================-->
+  <section class="nav-bar">
+    <div class="logo">Trav Mate</div>
+    <ul class="menu">
+      <li><a href="main.html">Home</a></li>
+      <li><a href="tours.html">Tours</a></li>
+      <li><a href="packages.html">Package</a></li>
+      <li><a href="booking.html">Blog</a></li>
+      <li><a href="aboutUs.html">About Us</a></li>
+      <li><a href="contactUs.html">Contact Us</a></li>
+    </ul>
+    <div class="profile-icon">
+      <a href="userLogin.html">
+        <i class='bx bx-user-circle' style="font-size: 2rem; color: black;"></i>
+      </a>
+    </div>
+  </section>
+
+  <header>
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you!</p>
+  </header>
+
+  <div class="contact-section">
+    <div class="contact-info">
+      <h2>Our Office</h2>
+      <p><strong>Address:</strong> JNTUH College of Engineering, Sultanpur, Telangana</p>
+      <p><strong>Email:</strong> support@travmate.com</p>
+      <p><strong>Phone:</strong> +91 98765 43210</p>
+      <p><strong>Hours:</strong> Mon-Fri, 9AM - 6PM</p>
+    </div>
+
+    <div class="contact-form">
+      <h2>Send a Message</h2>
+      <form action="#" method="post">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <input type="text" name="subject" placeholder="Subject" />
+        <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li>Offers & Discounts</li>
+        <li>Get Coupon</li>
+        <li>Contact Us</li>
+        <li>About</li>
+      </ul>
+    </div>
+    <div class="links">
+      <h3>Destinations</h3>
+      <ul>
+        <li>Telangana</li>
+        <li>Kerala</li>
+        <li>Kashmir</li>
+        <li>Himachal</li>
+      </ul>
+    </div>
+    <div class="links">
+      <h3>Support</h3>
+      <ul>
+        <li>FAQ</li>
+        <li>Payment Issues</li>
+        <li>Terms & Conditions</li>
+        <li>Privacy Policy</li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+<<<<<<< HEAD
+</html>
+=======
+</html>
+>>>>>>> f4350fb94a3552fd3ec38e50ac5464be18d4bdc9

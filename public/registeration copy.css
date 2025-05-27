@@ -1,0 +1,240 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  body {
+    background: black;
+  }
+  
+  /* Header Styles */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: chartreuse;
+    padding: 20px 12.5%;
+    width: 100%;
+    background: transparent;
+  }
+  
+  .mylogo {
+    font-size: 700; /* Adjust if needed */
+    align-items: center;
+  }
+  
+  .navigation {
+    display: flex;
+    gap: 20px;
+    align-content: space-between;
+  }
+  
+  .navigation a {
+    position: relative;
+    text-decoration: none;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 400;
+    top: 15px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .navigation a:hover {
+    color: #ffa31a;
+    transform: scale(1.1);
+  }
+  
+  .navigation a::after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: white;
+    border-radius: 5px;
+    bottom: -5px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 0.5s;
+  }
+  
+  .navigation a:hover::after {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  /* Container & Background */
+  .container {
+    position: absolute;
+    height: 550px;
+    width: 75%;
+    top: 90px;
+    left: 190px;
+    background-image: url('bg.jpg'); /* Use relative paths if possible */
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+  }
+  
+  /* Left-Side Content */
+  .tittle {
+    font-weight: bold;
+    font-size: 35px;
+    color: #ffa31a;
+  }
+  
+  .text h2 {
+    font-size: 40px;
+  }
+  
+  .text h2 span {
+    font-size: 30px;
+  }
+  
+  .text p {
+    font-size: 25px;
+  }
+  
+  .content {
+    width: 60%;
+    height: 100%;
+    background: transparent;
+    padding: 80px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Right-Side Form Container */
+  .container .box {
+    width: 40%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  /* Social Media Icons */
+  .socialmedia a i {
+    font-size: 30px;
+    color: #e4e4e4;
+    transition: 0.5s ease;
+  }
+  
+  .socialmedia a:hover i {
+    transform: scale(1.5);
+  }.socialmedia a:nth-child(1) i {
+    color: #0077b5; /* LinkedIn Blue */
+  }
+  
+  .socialmedia a:nth-child(2) i {
+    color: #3b5998; /* Facebook Blue */
+  }
+  
+  .socialmedia a:nth-child(3) i {
+    color: #E1306C; /* Instagram Pink/Red */
+  }
+  
+  .socialmedia a:nth-child(4) i {
+    color: #25D366; /* WhatsApp Green */
+  }
+  
+  
+  /* Registration Form Box */
+  .box .register-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(20px);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #e4e4e4;
+  }
+  
+  .register-box h2 {
+    font-size: 32px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Box Styles */
+  .inputbox {
+    position: relative;
+    width: 340px;
+    height: 52px;
+    border-bottom: 3px solid #e4e4e4;
+    margin: 30px 0;
+  }
+  
+  .inputbox input {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: transparent;
+    outline: none;
+    font-size: 20px;
+    color: #e4e4e4;
+    font-weight: 600;
+    border: none;
+  }
+  
+  .inputbox input:focus {
+    border-bottom: 3px solid #ffa31a;
+    box-shadow: 0px 5px 10px rgba(255, 163, 26, 0.5);
+    transition: 0.3s ease-in-out;
+  }
+  
+  /* Icon in Input Box */
+  .inputbox i {
+    font-size: 25px;
+    position: absolute;
+    right: 20px;
+    top: 30px;
+    transform: translateY(-50%);
+    color: #e4e4e4;
+  }
+  
+  /* Button Styles */
+  .btn {
+    text-align: center;
+  }
+  
+  .btn button {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    background-color: coral;
+    color: #e4e4e4;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.5s ease;
+    border: none;
+  }
+  
+.btn button:hover {
+    background-color: rgb(229, 48, 217);
+    color: wheat;
+  }
+  
+  /* Redirect Link*/
+.register {
+    text-align: center;
+}
+  
+.register a{
+    padding: 3px;
+    text-decoration: none;
+    color: blueviolet;
+    font-weight: 800;
+  }
+  

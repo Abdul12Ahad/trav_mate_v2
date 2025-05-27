@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Trip</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #00b894, #74b9ff);
+            color: #333;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 950px;
+            background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+            padding: 40px; /* Increased padding */
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        h2 {
+            font-size: 36px; /* Larger heading */
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #2d3436;
+            border-bottom: 2px solid #eee; /* Added a subtle divider */
+            padding-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 35px; /* Increased margin between sections */
+        }
+
+        .section h3 {
+            font-size: 26px; /* Slightly larger subheading */
+            color: #0984e3;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd; /* Subtle divider for subheadings */
+            padding-bottom: 8px;
+        }
+
+        .trip-info p,
+        .accommodation p {
+            margin: 8px 0; /* Slightly more spacing for text */
+            line-height: 1.6; /* Improved readability */
+        }
+
+        .accommodation {
+            border: 1px solid #dcdde1;
+            padding: 25px; /* Increased padding */
+            border-radius: 16px;
+            margin-bottom: 20px;
+            background: #f9f9f9; /* Lighter background */
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06); /* Subtle shadow */
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .accommodation:hover {
+            transform: translateY(-5px); /* Slightly more pronounced hover effect */
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #e74c3c; /* More vibrant red */
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        .confirm-btn, .booking-btn, .saved-trips-btn {
+            color: white;
+            border: none;
+            padding: 16px 20px; /* Increased padding */
+            border-radius: 16px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+        }
+
+        .confirm-btn:hover {
+            background: linear-gradient(135deg, #00cec9, #6c5ce7);
+            transform: scale(1.01); /* Subtle hover scale */
+        }
+
+        .booking-btn-hotels {
+            background-color: #f39c12;
+        }
+
+        .booking-btn-flights {
+            background-color: #3498db;
+        }
+
+        .booking-btn-transport {
+            background-color: #9b59b6;
+        }
+
+        .booking-btn:hover {
+            transform: scale(1.01);
+        }
+
+        .saved-trips-btn {
+            background: #2ecc71;
+        }
+
+        .saved-trips-btn:hover {
+            background: #27ae60;
+            transform: scale(1.01);
+        }
+
+        a {
+            text-decoration: none;
+            color: #0984e3;
+            font-weight: 600; /* Slightly bolder links */
+        }
+
+        /* Image Carousel Styles */
+        .destination-carousel {
+            margin-top: 20px;
+            border-radius: 16px;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            white-space: nowrap; /* Prevent images from wrapping */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px 0; /* Add some padding for visual spacing */
+        }
+
+        .destination-carousel img {
+            width: 250px; /* Adjust as needed */
+            height: auto;
+            border-radius: 12px;
+            margin-right: 15px; /* Spacing between images */
+            object-fit: cover;
+            display: inline-block; /* Display images in a row */
+            aspect-ratio: 16 / 9;
+        }
+
+        .destination-carousel img:last-child {
+            margin-right: 0; /* Remove margin from the last image */
+        }
+
+        .unsplash-credit {
+            font-size: 0.85em;
+            color: #777;
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <h2><i data-lucide="map-pin"></i> Review Your Trip</h2>
+
+        <div class="section">
+            <h3><i data-lucide="information-circle"></i> Trip Details</h3>
+            <div class="trip-info" id="tripInfo"></div>
+        </div>
+
+        <div class="section">
+            <h3><i data-lucide="image"></i> Destination Images</h3>
+            <div class="destination-carousel" id="destinationImagesCarousel">
+                </div>
+            <p class="unsplash-credit">Images from <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral" target="_blank">Unsplash</a></p>
+        </div>
+
+        <div class="section">
+            <h3><i data-lucide="home"></i> Selected Accommodations</h3>
+            <div id="accommodationListContainer"></div>
+        </div>
+
+        <button class="confirm-btn" onclick="saveTrip()">
+            <i data-lucide="check-circle"></i> Confirm & Save Trip
+        </button>
+
+        <button class="saved-trips-btn" onclick="window.location.href='saved-trips.html'">
+            <i data-lucide="list"></i> View Saved Trips
+        </button>
+
+        <div class="section">
+            <h3><i data-lucide="briefcase"></i> Book Your Trip</h3>
+            <button class="booking-btn booking-btn-hotels" onclick="window.open('https://www.booking.com', '_blank')">
+                <i data-lucide="hotel"></i> Book Hotels
+            </button>
+            <button class="booking-btn booking-btn-flights" onclick="window.open('https://www.skyscanner.com', '_blank')">
+                <i data-lucide="plane"></i> Book Flights
+            </button>
+            <button class="booking-btn booking-btn-transport" onclick="window.open('https://www.rome2rio.com', '_blank')">
+                <i data-lucide="bus"></i> Book Transport
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+
+            const tripData = JSON.parse(localStorage.getItem("tripData"));
+            if (!tripData) {
+                document.body.innerHTML = "<p style='color:red;'>No trip data found. Please go back and plan your trip.</p>";
+                return;
+            }
+
+            document.getElementById("tripInfo").innerHTML = `
+                <p><strong>Destination:</strong> <span id="destination">${tripData.destination}</span></p>
+                <p><strong>Budget:</strong> <span id="budget">${tripData.budget.toFixed(2)}</span> <span id="currency">${tripData.currency}</span></p>
+                <p><strong>Travel Class:</strong> <span id="travelType">${tripData.travelClass}</span></p>
+                <p><strong>Number of Travelers:</strong> <span id="travelers">${tripData.numTravelers}</span></p>
+                <p><strong>Trip Duration:</strong> ${tripData.duration} days</p>
+                <p><strong>Trip Dates:</strong> <span id="startDate">${new Date(tripData.startDate).toISOString().split("T")[0]}</span> - <span id="endDate">${new Date(tripData.endDate).toISOString().split("T")[0]}</span></p>
+                <p><strong>Estimated Cost/Person:</strong> ${tripData.costPerPerson.toFixed(2)} ${tripData.currency}</p>
+                <p><strong>Total Estimated Cost:</strong> ${tripData.totalCost.toFixed(2)} ${tripData.currency}</p>
+            `;
+
+            renderAccommodations();
+            fetchDestinationImages(tripData.destination, 6);
+        });
+
+        function renderAccommodations() {
+            const selectedAccommodations = JSON.parse(localStorage.getItem("selectedAccommodations") || "[]");
+            const container = document.getElementById("accommodationListContainer");
+            container.innerHTML = "";
+
+            if (selectedAccommodations.length === 0) {
+                container.innerHTML = "<p>No accommodations selected.</p>";
+            } else {
+                selectedAccommodations.forEach((acc, index) => {
+                    const div = document.createElement("div");
+                    div.classList.add("accommodation");
+                    div.innerHTML = `
+                        <p><strong>Name:</strong> ${acc.name}</p>
+                        <p><strong>Address:</strong> ${acc.address}</p>
+                        <p><strong>Price:</strong> ${acc.price}</p>
+                        <a href="${acc.url}" target="_blank">View Details</a>
+                        <button class="remove-btn" onclick="removeAccommodation(${index})">Remove</button>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            lucide.createIcons();
+        }
+
+        function removeAccommodation(index) {
+            let selectedAccommodations = JSON.parse(localStorage.getItem("selectedAccommodations") || "[]");
+            selectedAccommodations.splice(index, 1);
+            localStorage.setItem("selectedAccommodations", JSON.stringify(selectedAccommodations));
+            renderAccommodations();
+        }
+
+        async function saveTrip() {
+            const tripData = JSON.parse(localStorage.getItem("tripData") || "{}");
+            let selectedAccommodations = JSON.parse(localStorage.getItem("selectedAccommodations") || "[]");
+
+            if (!tripData || !tripData.destination) {
+                alert("No trip data found.");
+                return;
+            }
+
+            // Filter out accommodations with "Price: N/A"
+            const validAccommodations = selectedAccommodations.filter(acc => acc.price !== "Price: N/A");
+
+            const payload = {
+                destination: tripData.destination,
+                budget: tripData.budget,
+                currency: tripData.currency,
+                travelClass: tripData.travelClass,
+                numTravelers: tripData.numTravelers,
+                startDate: tripData.startDate,
+                endDate: tripData.endDate,
+                duration: tripData.duration,
+                costPerPerson: tripData.costPerPerson,
+                totalCost: tripData.totalCost,
+                accommodations: validAccommodations, // Use the filtered array
+            };
+
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("You are not logged in. Please log in again.");
+                window.location.href = "login.html"; // or your actual login page
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/trips/save", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("✅ Trip saved successfully!");
+                    // Optionally redirect to saved trips page
+                    // window.location.href = "/saved-trips.html";
+                } else if (response.status === 403) {
+                    alert("Session expired or unauthorized. Please log in again.");
+                    localStorage.removeItem("token");
+                    window.location.href = "login.html";
+                } else {
+                    alert("Failed to save trip: " + (data.message || "Unknown error"));
+                }
+            } catch (err) {
+                alert("Error saving trip: " + err.message);
+                console.error(err);
+            }
+        }
+
+        async function fetchDestinationImages(query, count = 6) {
+            const imagesCarousel = document.getElementById("destinationImagesCarousel");
+            imagesCarousel.innerHTML = ""; // Clear previous images
+            const unsplashApiKey = 'YjrqRz1N2W2V-IZyCgbnra9TlkYBD4uOH25HSp39cK0'; // **REPLACE WITH YOUR ACTUAL API KEY**
+            const apiUrl = `https://api.unsplash.com/search/photos?query=${query}&client_id=${unsplashApiKey}&orientation=landscape&per_page=${count}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(result => {
+                        const imageUrl = result.urls.regular;
+                        const imageElement = document.createElement("img");
+                        imageElement.src = imageUrl;
+                        imageElement.alt = query;
+                        imagesCarousel.appendChild(imageElement);
+                    });
+                } else {
+                    imagesCarousel.innerHTML = "<p>No images found for this destination.</p>";
+                }
+            } catch (error) {
+                console.error("Error fetching destination images:", error);
+                imagesCarousel.innerHTML = "<p>Failed to load destination images.</p>";
+            }
+        }
+    </script>
+</body>
+</html>

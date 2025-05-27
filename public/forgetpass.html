@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="forgetpass.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <title>Forget Password</title>
+</head>
+<body>
+  <header class="header">
+    <nav class="navigation">
+      <a href="index.html">Home</a>
+      <a href="#">Trips</a>
+      <a href="#">Booking</a>
+      <a href="#">Services</a>
+      <a href="#">Rooms</a>
+    </nav>
+    <p class="mylogo">Tripout</p>
+  </header>
+  <div class="container">
+    <div class="content">
+      <h2 class="tittle"><i class='bx bx-key'></i> Forgot Password</h2>
+      <form id="reset-form" onsubmit="return handleReset(event)">
+        <div class="inputbox">
+          <input type="email" id="resetEmail" placeholder="Enter your email" required />
+        </div>
+        <div class="btn">
+          <button type="submit">Send Reset Link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function handleReset(event) {
+      event.preventDefault();
+      const email = document.getElementById('resetEmail').value;
+
+      const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+          alert("Password reset link sent!");
+      } else {
+          alert(data.error);
+      }
+    }
+  </script>
+</body>
+</html>

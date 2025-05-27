@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saved Trips</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #89f7fe, #66a6ff);
+      color: #333;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    body.dark-mode .container {
+      background: rgba(40, 40, 40, 0.95);
+    }
+
+    body.dark-mode input,
+    body.dark-mode select {
+      background-color: #2a2a2a;
+      color: white;
+      border-color: #444;
+    }
+
+    header.hero {
+      background: url('bg2.jpg') no-repeat center center/cover;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+
+    header.hero .overlay {
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    header.hero h1 {
+      font-size: 2.5rem;
+      z-index: 2;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .top-bar .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .logout-btn,
+    .back-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .logout-btn {
+      background-color: #ff6b6b;
+    }
+
+    .back-btn {
+      background-color: #6c5ce7;
+    }
+
+    .dark-mode-toggle {
+      background-color: #333;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      cursor: pointer;
+    }
+
+    .saved-trip {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+    }
+
+    .saved-trip h3 {
+      margin-bottom: 10px;
+    }
+
+    .saved-trip ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .saved-trip li {
+      margin: 8px 0;
+    }
+
+    .saved-trip .delete-btn {
+      background-color: #ff6b6b;
+      padding: 5px 10px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .saved-trip .delete-btn:hover {
+      background-color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="overlay">
+      <h1>Saved Trips</h1>
+    </div>
+  </header>
+  <div class="container">
+    <div class="top-bar">
+      <button class="back-btn" onclick="window.history.back()">Back to Dashboard</button>
+      <div class="actions">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+          <i class="fa fa-moon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="savedTripsList"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSavedTrips();
+    });
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+    }
+
+    function loadSavedTrips() {
+      const savedTrips = JSON.parse(localStorage.getItem('savedTrips') || '[]');
+      const savedTripsList = document.getElementById('savedTripsList');
+
+      if (savedTrips.length === 0) {
+        savedTripsList.innerHTML = '<p>No saved trips found.</p>';
+        return;
+      }
+
+      savedTripsList.innerHTML = savedTrips.map((trip, index) => `
+        <div class="saved-trip">
+          <h3>${trip.destination}</h3>
+          <ul>
+            <li><strong>Budget:</strong> ${trip.budget}</li>
+            <li><strong>Start Date:</strong> ${new Date(trip.startDate).toLocaleDateString()}</li>
+            <li><strong>End Date:</strong> ${new Date(trip.endDate).toLocaleDateString()}</li>
+            <li><strong>Accommodations:</strong> ${trip.accommodations.map(acc => acc.name).join(', ')}</li>
+          </ul>
+          <button class="delete-btn" onclick="deleteSavedTrip(${index})">Delete</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteSavedTrip(index) {
+      let savedTrips = JSON.parse(localStorage.getItem('savedTrips') || '[]');
+      savedTrips.splice(index, 1);
+      localStorage.setItem('savedTrips', JSON.stringify(savedTrips));
+      loadSavedTrips();
+    }
+  </script>
+</body>
+</html>

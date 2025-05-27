@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trip Budget Estimator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease-in-out;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h2 {
+      font-size: 28px;
+      margin: 0;
+      color: #2d3436;
+    }
+
+    #tripSummary {
+      background-color: #f1f2f6;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      border-left: 5px solid #00cec9;
+    }
+
+    form label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid #dcdde1;
+      font-size: 15px;
+    }
+
+    button {
+      background: linear-gradient(45deg, #0984e3, #6c5ce7);
+      color: white;
+      padding: 14px;
+      border: none;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #6c5ce7, #0984e3);
+    }
+
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background: #dff9fb;
+      border-radius: 12px;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .results p {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+
+    .accommodation-list {
+      margin-top: 20px;
+    }
+
+    .accommodation-item {
+      background: #fefefe;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .accommodation-item input[type="checkbox"] {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      transform: scale(1.2);
+    }
+
+    .accommodation-item a {
+      color: #0984e3;
+      text-decoration: none;
+    }
+
+    .continue-btn {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .date-picker-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .date-picker-container div {
+      width: 48%;
+    }
+
+    .date-picker-container label {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .date-picker-container input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #dcdde1;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2><i data-lucide="wallet"></i> Trip Budget Estimator</h2>
+    </div>
+
+    <div id="tripSummary"></div>
+
+    <form id="budgetForm">
+      <label for="travelClass">Travel Class:</label>
+      <select id="travelClass">
+        <option value="economy">Economy</option>
+        <option value="business">Business</option>
+        <option value="firstClass">First Class</option>
+      </select>
+
+      <label for="numTravelers">Number of Travelers:</label>
+      <input type="number" id="numTravelers" min="1" value="1" required />
+
+      <div class="date-picker-container">
+        <div>
+          <label for="startDate">Trip Start Date:</label>
+          <input type="date" id="startDate" required />
+        </div>
+        <div>
+          <label for="endDate">Trip End Date:</label>
+          <input type="date" id="endDate" required />
+        </div>
+      </div>
+
+      <button type="submit"><i data-lucide="calculator"></i> Estimate Budget</button>
+    </form>
+
+    <div class="results" id="resultsBox" style="display:none;">
+      <h3><i data-lucide="file-text"></i> Estimated Results</h3>
+      <p><strong>Duration:</strong> <span id="tripDuration"></span> days</p>
+      <p><strong>Estimated Cost/Person:</strong> <span id="costPerPerson"></span></p>
+      <p><strong>Total Cost:</strong> <span id="totalCost"></span></p>
+
+      <div class="accommodation-list" id="accommodationList"></div>
+      <button class="continue-btn" onclick="goToReviewPage()">Continue to Review</button>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function getQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return {
+        destination: urlParams.get("destination") || "",
+        budget: parseFloat(urlParams.get("budget")) || 0,
+        currency: urlParams.get("currency") || "USD",
+      };
+    }
+
+    const { destination, budget, currency } = getQueryParams();
+
+    if (!destination || isNaN(budget)) {
+      alert("Missing destination or budget info. Please go back and fill the details.");
+    }
+
+    const summaryDiv = document.getElementById("tripSummary");
+    summaryDiv.innerHTML = `
+      <p><strong>Destination:</strong> ${destination}</p>
+      <p><strong>Budget:</strong> ${budget.toFixed(2)} ${currency}</p>
+    `;
+
+    document.getElementById("budgetForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const travelClass = document.getElementById("travelClass").value;
+      const numTravelers = parseInt(document.getElementById("numTravelers").value);
+      const start = new Date(document.getElementById("startDate").value);
+      const end = new Date(document.getElementById("endDate").value);
+
+      if (end < start) {
+        alert("End date must be after start date.");
+        return;
+      }
+
+      const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      let multiplier = travelClass === "economy" ? 1 : travelClass === "business" ? 2 : 3;
+
+      const costPerPerson = (budget * multiplier) / numTravelers;
+      const totalCost = costPerPerson * numTravelers;
+
+      document.getElementById("tripDuration").textContent = days;
+      document.getElementById("costPerPerson").textContent = `${costPerPerson.toFixed(2)} ${currency}`;
+      document.getElementById("totalCost").textContent = `${totalCost.toFixed(2)} ${currency}`;
+      document.getElementById("resultsBox").style.display = "block";
+
+      localStorage.setItem("tripData", JSON.stringify({
+        destination,
+        budget,
+        currency,
+        travelClass,
+        numTravelers,
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
+        duration: days,
+        costPerPerson,
+        totalCost
+      }));
+
+      fetchAccommodation(destination);
+    });
+
+    function fetchAccommodation(destination) {
+      const apiKey = "dce1299f9amsh09095894c79a6b4p1f21b6jsnfbcf74056ea9";
+      const url = `https://travel-advisor.p.rapidapi.com/locations/search?query=${encodeURIComponent(destination)}&limit=10&offset=0&units=km&currency=${currency}&sort=relevance&lang=en_US`;
+
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': apiKey,
+          'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
+        }
+      };
+
+      fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+          const accommodationList = document.getElementById("accommodationList");
+          accommodationList.innerHTML = "";
+
+          if (data?.data?.length > 0) {
+            data.data.forEach((item, index) => {
+              const acc = item.result_object || item;
+              const name = acc.name || "No name available";
+              const address = acc.address || "No address available";
+              const price = acc.price || "N/A";
+              const detailsUrl = acc.web_url || "#";
+
+              accommodationList.innerHTML += `
+                <div class="accommodation-item">
+                  <input type="checkbox" id="accommodation-${index}" class="accommodation-checkbox" />
+                  <a href="${detailsUrl}" target="_blank"><h4>${name}</h4></a>
+                  <p>${address}</p>
+                  <p><strong>Price:</strong> ${price}</p>
+                </div>
+              `;
+            });
+          }
+        })
+        .catch(error => console.error('Error fetching accommodation data:', error));
+    }
+
+    function goToReviewPage() {
+      const selected = [];
+      document.querySelectorAll(".accommodation-checkbox:checked").forEach(checkbox => {
+        const parent = checkbox.closest(".accommodation-item");
+        const name = parent.querySelector("h4")?.textContent || "";
+        const address = parent.querySelector("p:nth-of-type(1)")?.textContent || "";
+        const price = parent.querySelector("p:nth-of-type(2)")?.textContent || "";
+        selected.push({ name, address, price });
+      });
+
+      localStorage.setItem("selectedAccommodations", JSON.stringify(selected));
+      window.location.href = "review.html";
+    }
+  </script>
+</body>
+</html>

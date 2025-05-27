@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="design.css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <title>Login | TravMate</title>
+</head>
+<body>
+    <header class="header">
+        <nav class="navigation">
+            <a href="#">Home</a>
+            <a href="#">Trips</a>
+            <a href="#">Booking</a>
+            <a href="#">Services</a>
+            <a href="#">Rooms</a>
+        </nav>
+        <p class="mylogo">Tripout</p>
+        <form action="#" class="search-bar">
+            <input type="text" placeholder="search" />
+            <button type="submit"><i class='bx bx-search-alt'></i></button>
+        </form>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <h2 class="tittle"><i class='bx bx-trip'></i>Plan My Trip</h2>
+            <div class="text">
+                <h2>
+                    Welcome!<span><br />to our Website TravMate...</span>
+                </h2>
+                <p>
+                    "Welcome to our travel hub, your gateway to unforgettable adventures! Whether you're seeking hidden gems or famous destinations, we provide curated guides and expert tips to help you plan your perfect journey."
+                </p>
+                <div class="socialmedia">
+                    <a href="#"><i class='bx bxl-linkedin'></i></a>
+                    <a href="#"><i class='bx bxl-facebook'></i></a>
+                    <a href="#"><i class='bx bxl-instagram'></i></a>
+                    <a href="#"><i class='bx bxl-whatsapp'></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="signin">
+                <form id="login-form" method="POST" onsubmit="return handleLogin(event)">
+                    <h2>Login</h2>
+                    <div class="inputbox">
+                        <input type="email" id="Email" name="email" placeholder="Email" required />
+                        <span class="icon"><i class='bx bxl-gmail'></i></span>
+                    </div>
+                    <div class="inputbox">
+                        <input type="password" id="Password" name="password" placeholder="Password" required />
+                        <span class="icon"><i class='bx bxs-lock-alt'></i></span>
+                    </div>
+                    <div class="forgetpassword">
+                        <a href="forgetpass.html">Forget password?</a>
+                    </div>
+                    <div class="btn">
+                        <button type="submit" class="redirect">Login</button>
+                    </div>
+                    <div class="register">
+                        <p>New User? <a href="register.html">Register now</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = 'main.html';
+            }
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById("Email").value;
+            const password = document.getElementById("Password").value;
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("refreshToken", data.refreshToken);
+                    window.location.href = "main.html";
+                } else {
+                    alert(data.error || "Invalid login credentials");
+                }
+            } catch (err) {
+                alert("Login failed: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

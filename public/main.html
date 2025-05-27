@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mainDesign.css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
+    <title>Trav Mate</title>
+</head>
+
+<body>
+
+    <section class="nav-bar">
+        <div class="logo">Trav Mate</div>
+        <ul class="menu">
+            <li><a href="main.html">Home</a></li>
+            <li><a href="tours.html">Tours</a></li>
+            <li><a href="packages.html">Package</a></li>
+            <li><a href="booking.html">Blog</a></li>
+            <li><a href="aboutUs.html">About Us</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+    </section>
+
+    <section class="banner">
+        <div class="banner-text-item">
+            <div class="banner-heading">
+                <h1>Find your Next tour!</h1>
+            </div>
+            <form class="form">
+                <button type="button" class="book">Book</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="service-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Guides">
+            <h2>8000+ Our Local Guides</h2>
+        </div>
+        <div class="service-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png" alt="Trusted">
+            <h2>100% Trusted Tour Agency</h2>
+        </div>
+        <div class="service-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/711/711769.png" alt="Experience">
+            <h2>28+ Years of Travel Experience</h2>
+        </div>
+        <div class="service-item">
+            <img src="https://cdn-icons-png.flaticon.com/512/633/633600.png" alt="Feedback">
+            <h2>98% Happy Travelers</h2>
+        </div>
+    </section>
+
+    <section class="places">
+        <div class="places-text">
+            <small>FEATURED TOURS PACKAGES</small>
+            <h2>Favourite Places</h2>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="zoom-img">
+                    <div class="img-card">
+                        <img src="https://media.istockphoto.com/id/1215274990/photo/high-wide-angle-view-of-charminar-in-the-night.jpg?s=612x612&w=0&k=20&c=byyIjqgbslf-L191n6SJu0s35fvNoVeWsxV5rIPK7Sk=" alt="Hyderabad">
+                    </div>
+                </div>
+                <div class="text">
+                    <span class="rating">⭐⭐⭐⭐⭐</span>
+                    <h2>Historic Hyderabad</h2>
+                    <p class="cost">₹5000 / Person</p>
+                    <div class="card-box">
+                        <p class="time">🕓 2 Days</p>
+                        <p class="location">✈ Telangana, India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="zoom-img">
+                    <div class="img-card">
+                        <img src="https://s7ap1.scene7.com/is/image/incredibleindia/1-palolem-beach-goa-goa-city-hero?qlt=82&ts=1726735654599" alt="Goa">
+                    </div>
+                </div>
+                <div class="text">
+                    <span class="rating">⭐⭐⭐⭐⭐</span>
+                    <h2>Beaches of Goa</h2>
+                    <p class="cost">₹8500 / Person</p>
+                    <div class="card-box">
+                        <p class="time">🕓 3 Days</p>
+                        <p class="location">✈ Goa, India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="zoom-img">
+                    <div class="img-card">
+                        <img src="https://s7ap1.scene7.com/is/image/incredibleindia/hawa-mahal-jaipur-rajasthan-city-1-hero?qlt=82&ts=1726660605161" alt="Jaipur">
+                    </div>
+                </div>
+                <div class="text">
+                    <span class="rating">⭐⭐⭐⭐⭐</span>
+                    <h2>Royal Jaipur</h2>
+                    <p class="cost">₹9000 / Person</p>
+                    <div class="card-box">
+                        <p class="time">🕓 3 Days</p>
+                        <p class="location">✈ Rajasthan, India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="zoom-img">
+                    <div class="img-card">
+                        <img src="https://kakatiya.ac.in/images/fort_warangal.jpg" alt="Warangal">
+                    </div>
+                </div>
+                <div class="text">
+                    <span class="rating">⭐⭐⭐⭐</span>
+                    <h2>Ancient Warangal</h2>
+                    <p class="cost">₹4000 / Person</p>
+                    <div class="card-box">
+                        <p class="time">🕓 2 Days</p>
+                        <p class="location">✈ Telangana, India</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="about-img">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Indian_road_trip.jpg/800px-Indian_road_trip.jpg" alt="Road Trip India">
+        </div>
+        <div class="about-text">
+            <small>ABOUT OUR COMPANY</small>
+            <h2>We are Go Trip – Your Travel Partner</h2>
+            <p>We specialize in unique, affordable, and memorable journeys across India. Whether it's the forts of Rajasthan or the ghats of Varanasi, we bring India to you.</p>
+
+            <label><input type="checkbox" checked> Curated Indian experiences</label>
+            <label><input type="checkbox" checked> Customizable tour packages</label>
+            <label><input type="checkbox" checked> Expert local guides</label>
+            <label><input type="checkbox" checked> 24/7 support</label>
+            <a href="#">ABOUT US</a>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li>Offers & Discounts</li>
+                <li>Get Coupon</li>
+                <li>Contact Us</li>
+                <li>About</li>
+            </ul>
+        </div>
+        <div class="links">
+            <h3>Destinations</h3>
+            <ul>
+                <li>Telangana</li>
+                <li>Kerala</li>
+                <li>Kashmir</li>
+                <li>Himachal</li>
+            </ul>
+        </div>
+        <div class="links">
+            <h3>Support</h3>
+            <ul>
+                <li>FAQ</li>
+                <li>Payment Issues</li>
+                <li>Terms & Conditions</li>
+                <li>Privacy Policy</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            window.location.href = 'userLogin.html';
+        }
+
+        document.querySelector(".book").addEventListener("click", function () {
+            window.location.href = "dashboard.html";
+        });
+</script>
+</body>
+
+</html>

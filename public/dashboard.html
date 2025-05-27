@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Travel Planner Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #89f7fe, #66a6ff);
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        body.dark-mode .container {
+            background: rgba(40, 40, 40, 0.95);
+        }
+
+        body.dark-mode input,
+        body.dark-mode select {
+            background-color: #2a2a2a;
+            color: white;
+            border-color: #444;
+        }
+
+        header.hero {
+            background: url('bg2.jpg') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        header.hero .overlay {
+            background-color: rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header.hero h1 {
+            font-size: 2.5rem;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .top-bar .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-btn,
+        .saved-trips-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background-color: #ff6b6b;
+        }
+
+        .saved-trips-btn {
+            background-color: #6c5ce7;
+        }
+
+        .dark-mode-toggle {
+            background-color: #333;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .form-section { margin-bottom: 40px; }
+        .form-section form {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"], input[type="number"], select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            flex: 1 1 45%;
+        }
+
+        button[type="submit"] {
+            background: #0984e3;
+            color: white;
+            margin-left: auto; /* Push to the right */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .dark-mode .card {
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #0984e3;
+        }
+
+        .checkout-btn {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .checkout-btn button {
+            background-color: #00b894;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .saved-trips {
+            margin-top: 50px;
+        }
+
+        .trip-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .trip-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .view-btn {
+            background-color: #6c5ce7;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #d63031;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="overlay">
+            <h1>Plan Your Next Adventure</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="top-bar">
+            <h2>Welcome, <span id="userName">Traveler</span></h2>
+            <div class="actions">
+                <button class="saved-trips-btn">Saved Trips</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="section-title">Start Planning</h3>
+            <form id="travelForm">
+                <input type="text" id="destinationInput" placeholder="Enter Destination" required />
+                <div style="flex: 1 1 45%; display: flex; gap: 10px;">
+                    <input type="number" id="budget" placeholder="Enter Budget" required style="flex: 2;" />
+                    <select id="currencySelector" style="flex: 1;">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="AUD">AUD</option>
+                        <option value="CAD">CAD</option>
+                        <option value="JPY">JPY</option>
+                        <option value="INR">INR</option>
+                    </select>
+                </div>
+
+                <button type="submit">Get Suggestions</button>
+            </form>
+        </div>
+
+        <div class="recommendations">
+            <h3 class="section-title">Destination Info</h3>
+            <div class="card-list" id="recommendationsList"></div>
+        </div>
+
+        <div class="checkout-btn">
+            <button onclick="goToBudgetPage()">Check Out Budget</button>
+        </div>
+    </div>
+
+<script>
+    const destinationInput = document.getElementById("destinationInput");
+    const budgetInput = document.getElementById("budget");
+    const recommendationsList = document.getElementById("recommendationsList");
+    const currencySelector = document.getElementById("currencySelector");
+
+    function isTokenExpired(token) {
+        if (!token) return true;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000 < Date.now();
+    }
+
+    async function refreshAccessToken(refreshToken) {
+        try {
+            const response = await fetch('/api/refresh', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken }),
+            });
+            const data = await response.json();
+            if (response.ok && data.token) {
+                localStorage.setItem("token", data.token);
+                return data.token;
+            } else {
+                throw new Error("Refresh failed");
+            }
+        } catch (error) {
+            console.error("Token refresh error:", error);
+            window.location.href = 'userLogin.html'; // Redirect to login on refresh failure
+        }
+    }
+
+    async function fetchWikipediaSummary(placeName) {
+        try {
+            const response = await fetch(`/api/destinations/wikipedia/${placeName}`);
+            const data = await response.json();
+            return data.extract || "No summary available.";
+        } catch (error) {
+            return "Error fetching summary.";
+        }
+    }
+
+    const currencyRates = {
+        EUR: 0.85, GBP: 0.75, AUD: 1.35,
+        CAD: 1.25, JPY: 135, INR: 82,
+    };
+
+    async function fetchCurrencyConversion(amount, currency) {
+        return parseFloat(amount) * (currencyRates[currency] || 1);
+    }
+
+    function goToBudgetPage() {
+        const destination = destinationInput.value;
+        const budget = budgetInput.value;
+        if (!destination || !budget) {
+            alert("Please fill in destination and budget first.");
+            return;
+        }
+        window.location.href = `budget.html?destination=${encodeURIComponent(destination)}&budget=${encodeURIComponent(budget)}&currency=${currencySelector.value}`;
+    }
+
+    async function submitTravelForm(event) {
+        event.preventDefault();
+        const place = destinationInput.value;
+        const budget = budgetInput.value;
+        const selectedCurrency = currencySelector.value;
+
+        let token = localStorage.getItem("token");
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (isTokenExpired(token)) {
+            token = await refreshAccessToken(refreshToken);
+            if (!token) return;
+        }
+
+        const summary = await fetchWikipediaSummary(place);
+        const trimmedSummary = summary.split(" ").slice(0, 100).join(" ") + "...";
+        const convertedBudget = await fetchCurrencyConversion(budget, selectedCurrency);
+
+        recommendationsList.innerHTML = `
+            <div class="card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h4>${place}</h4>
+                <p>${trimmedSummary}</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-money-bill-wave"></i>
+                <h4>Estimated Budget</h4>
+                <p>${convertedBudget.toFixed(2)} ${selectedCurrency}</p>
+            </div>`;
+    }
+
+    document.getElementById("travelForm").addEventListener("submit", submitTravelForm);
+</script>
+</body>
+</html>
